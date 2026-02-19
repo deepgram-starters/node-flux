@@ -1,0 +1,56 @@
+{
+  "name": "@deepgram/node-flux",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real-time transcription with turn detection using Deepgram Flux API",
+  "main": "server.js",
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "start": "node --no-deprecation server.js",
+    "start-backend": "nodemon --no-deprecation server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepgram-starters/node-flux.git"
+  },
+  "keywords": [
+    "speech-to-text",
+    "deepgram",
+    "streaming",
+    "flux",
+    "turn-detection"
+  ],
+  "author": "Deepgram DX Team <devrel@deepgram.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deepgram-starters/node-flux/issues"
+  },
+  "homepage": "https://github.com/deepgram-starters/node-flux#readme",
+  "dependencies": {
+    "cors": "2.8.5",
+    "dotenv": "17.2.3",
+    "express": "5.2.1",
+    "jsonwebtoken": "9.0.2",
+    "toml": "3.0.0",
+    "ws": "8.18.0"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.10"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
