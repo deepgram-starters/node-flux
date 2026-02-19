@@ -137,7 +137,6 @@ wss.on('connection', async (clientWs, request) => {
   const model = 'flux-general-en';
   const encoding = url.searchParams.get('encoding') || 'linear16';
   const sample_rate = url.searchParams.get('sample_rate') || '16000';
-  const channels = url.searchParams.get('channels') || '1';
   const eot_threshold = url.searchParams.get('eot_threshold');
   const eager_eot_threshold = url.searchParams.get('eager_eot_threshold');
   const eot_timeout_ms = url.searchParams.get('eot_timeout_ms');
@@ -148,7 +147,6 @@ wss.on('connection', async (clientWs, request) => {
   deepgramUrl.searchParams.set('model', model);
   deepgramUrl.searchParams.set('encoding', encoding);
   deepgramUrl.searchParams.set('sample_rate', sample_rate);
-  deepgramUrl.searchParams.set('channels', channels);
   if (eot_threshold) deepgramUrl.searchParams.set('eot_threshold', eot_threshold);
   if (eager_eot_threshold) deepgramUrl.searchParams.set('eager_eot_threshold', eager_eot_threshold);
   if (eot_timeout_ms) deepgramUrl.searchParams.set('eot_timeout_ms', eot_timeout_ms);
@@ -156,13 +154,26 @@ wss.on('connection', async (clientWs, request) => {
     deepgramUrl.searchParams.append('keyterm', term);
   }
 
-  console.log(`Connecting to Deepgram Flux: model=${model}, encoding=${encoding}, sample_rate=${sample_rate}, channels=${channels}`);
+  console.log(`Connecting to Deepgram Flux: model=${model}, encoding=${encoding}, sample_rate=${sample_rate}`);
 
   // Create WebSocket connection to Deepgram
+  console.log(`Deepgram URL: ${deepgramUrl.toString()}`);
   const deepgramWs = new WebSocket(deepgramUrl.toString(), {
     headers: {
       'Authorization': `Token ${CONFIG.deepgramApiKey}`
     }
+  });
+
+  // Capture HTTP error responses from Deepgram (e.g. 400, 401)
+  deepgramWs.on('unexpected-response', (req, res) => {
+    let body = '';
+    res.on('data', chunk => body += chunk);
+    res.on('end', () => {
+      console.error(`Deepgram rejected connection (${res.statusCode}): ${body}`);
+      if (clientWs.readyState === WebSocket.OPEN) {
+        clientWs.close(1011, `Deepgram error: ${res.statusCode}`);
+      }
+    });
   });
 
   let clientMessageCount = 0;
