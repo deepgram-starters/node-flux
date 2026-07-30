@@ -6,7 +6,7 @@ repository = "https://github.com/deepgram-starters/node-flux"
 useCase = "flux"
 language = "javascript"
 framework = "node"
-sdk = "N/A"
+sdk = "@deepgram/sdk"
 tags = ["flux", "turn-detection", "real-time-transcription", "streaming-stt", "end-of-turn", "javascript", "node"]
 
 [check]
